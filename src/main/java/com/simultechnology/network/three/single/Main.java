@@ -1,4 +1,6 @@
-package com.simultechnology.network.three.multi;
+package com.simultechnology.network.three.single;
+
+import com.simultechnology.network.three.multi.TCPServer;
 
 import java.io.IOException;
 
@@ -12,7 +14,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] arg) {
         try {
-            TCPServer server = new TCPServer(57777);
+            TCPServer server = new TCPServer(59999);
             new Thread(server).start();
 
         } catch (IOException e) {
