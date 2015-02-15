@@ -1,9 +1,9 @@
 package com.simultechnology.network.three.single;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,13 +23,34 @@ public class ConnectionHandler implements Runnable {
         handleConversation(this.socket);
     }
     public void handleConversation(Socket socket) {
-        try (InputStream inputStream = socket.getInputStream();
-             OutputStream outputStream = socket.getOutputStream()) {
+        try {
+            InputStream inputStream = socket.getInputStream();
+            System.out.println(inputStream);
 
+            BufferedReader br =
+                    new BufferedReader(new InputStreamReader(inputStream));
+            String line = br.readLine();
+            line = URLDecoder.decode(line, StandardCharsets.UTF_8.name());
+            String[] splits = line.split("\\s");
+            line = splits[1];
+            int index = line.indexOf("?");
+            line = line.substring(index + 1);
+            System.out.println(line);
+
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write(line.getBytes());
             outputStream.flush();
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            try {
+                System.out.println("close!!");
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.simultechnology.network.three.single;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +21,11 @@ public class TCPServer implements Runnable {
     @Override
     public void run() {
         for (;;) {
-            try (Socket socket = serverSocket.accept()) {
+            try {
+                Socket socket = serverSocket.accept();
+                SocketAddress socketAddress = socket.getRemoteSocketAddress();
+                System.out.println("remoteAddress：" + socketAddress);
+                new ConnectionHandler(socket).run();
 
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
